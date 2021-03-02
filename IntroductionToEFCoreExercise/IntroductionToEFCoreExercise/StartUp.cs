@@ -138,7 +138,6 @@ namespace SoftUni
 
         public static string GetAddressesByTown(SoftUniContext context)
         {
-            //Adding some text here to take a conflict
             return null;
         }
     }
