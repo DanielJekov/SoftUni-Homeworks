@@ -13,7 +13,7 @@ namespace SoftUni
         static void Main(string[] args)
         {
             var context = new SoftUniContext();
-            Console.WriteLine(GetAddressesByTown(context));
+            Console.WriteLine(GetEmployee147(context));
         }
         public static string GetEmployeesFullInformation(SoftUniContext context)
         {
@@ -159,8 +159,31 @@ namespace SoftUni
 
         public static string GetEmployee147(SoftUniContext context)
         {
+            int currIdToTakeEmployee = 147;
 
-            return null;
+            var takenByIDEmployee = context.Employees
+                                           .Select(x => new Employee
+                                                          { 
+                                                           EmployeeId= x.EmployeeId,
+                                                           FirstName = x.FirstName,
+                                                           LastName = x.LastName,
+                                                           JobTitle = x.JobTitle,
+                                                           EmployeesProjects = x.EmployeesProjects.Select(p => new EmployeeProject
+                                                           {
+                                                              Project = p.Project
+                                                           })
+                                                           .OrderBy(x => x.Project.Name)
+                                                           .ToList()
+                                                           })
+                                           .FirstOrDefault(x => x.EmployeeId == currIdToTakeEmployee);
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"{takenByIDEmployee.FirstName} {takenByIDEmployee.LastName} - {takenByIDEmployee.JobTitle}");
+            foreach (var item in takenByIDEmployee.EmployeesProjects)
+            {
+                sb.AppendLine($"{item.Project.Name}");
+            }
+            return sb.ToString();
         }
     }
 }
