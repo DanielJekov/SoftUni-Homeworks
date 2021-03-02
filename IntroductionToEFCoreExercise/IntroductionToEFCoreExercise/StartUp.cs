@@ -115,7 +115,7 @@ namespace SoftUni
                                              })
                                              .Take(10)
                                              .ToList();
-                
+
             var sb = new StringBuilder();
 
             foreach (var employee in employees)
@@ -130,10 +130,15 @@ namespace SoftUni
                         endDate = endDate2.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture);
                     }
 
-                    sb.AppendLine($"--{item.ProjectName} - {item.StartDate.ToString("M/d/yyyy h:mm:ss tt" , CultureInfo.InvariantCulture)} - {endDate}");
+                    sb.AppendLine($"--{item.ProjectName} - {item.StartDate.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture)} - {endDate}");
                 }
             }
             return sb.ToString();
+        }
+
+        public static string GetAddressesByTown(SoftUniContext context)
+        {
+            return null;
         }
     }
 }
