@@ -138,7 +138,7 @@ namespace SoftUni
 
         public static string GetAddressesByTown(SoftUniContext context)
         {
-            //adding some text here to conflict with the remote repo.
+            //Adding some text here to take a conflict
             return null;
         }
     }
