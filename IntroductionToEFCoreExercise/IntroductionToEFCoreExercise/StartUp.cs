@@ -13,7 +13,7 @@ namespace SoftUni
         static void Main(string[] args)
         {
             var context = new SoftUniContext();
-            Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
+            Console.WriteLine(GetLatestProjects(context));
         }
         public static string GetEmployeesFullInformation(SoftUniContext context)
         {
@@ -220,6 +220,31 @@ namespace SoftUni
                 }
             }
             return sb.ToString();
+        }
+
+        public static string GetLatestProjects(SoftUniContext context)
+        {
+            var lastest10Projects = context.Projects
+                                    .Select(x => new
+                                    {
+                                        x.Name,
+                                        x.Description,
+                                        x.StartDate,
+                                    })
+                                    .OrderByDescending(x => x.StartDate)
+                                    .Take(10)
+                                    .OrderBy(x => x.Name)
+                                    .ToList();
+
+            var sb = new StringBuilder();
+            foreach (var currProject in lastest10Projects)
+            {
+                sb.AppendLine($"{currProject.Name}");
+                sb.AppendLine($"{currProject.Description}");
+                sb.AppendLine($"{currProject.StartDate.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture)}");
+            }
+
+            return sb.ToString().TrimEnd();
         }
     }
 }
