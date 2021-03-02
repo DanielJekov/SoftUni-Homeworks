@@ -13,7 +13,7 @@ namespace SoftUni
         static void Main(string[] args)
         {
             var context = new SoftUniContext();
-            Console.WriteLine(GetEmployee147(context));
+            Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
         }
         public static string GetEmployeesFullInformation(SoftUniContext context)
         {
@@ -162,26 +162,62 @@ namespace SoftUni
             int currIdToTakeEmployee = 147;
 
             var takenByIDEmployee = context.Employees
-                                           .Select(x => new Employee
-                                                          { 
-                                                           EmployeeId= x.EmployeeId,
-                                                           FirstName = x.FirstName,
-                                                           LastName = x.LastName,
-                                                           JobTitle = x.JobTitle,
-                                                           EmployeesProjects = x.EmployeesProjects.Select(p => new EmployeeProject
-                                                           {
-                                                              Project = p.Project
-                                                           })
-                                                           .OrderBy(x => x.Project.Name)
-                                                           .ToList()
-                                                           })
-                                           .FirstOrDefault(x => x.EmployeeId == currIdToTakeEmployee);
+                .Select(x => new Employee
+                 { 
+                    EmployeeId= x.EmployeeId,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    JobTitle = x.JobTitle,
+                    EmployeesProjects = x.EmployeesProjects.Select(p => new EmployeeProject
+                    {
+                       Project = p.Project
+                    })
+                    .OrderBy(x => x.Project.Name)
+                    .ToList()
+                  })
+                .FirstOrDefault(x => x.EmployeeId == currIdToTakeEmployee);
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"{takenByIDEmployee.FirstName} {takenByIDEmployee.LastName} - {takenByIDEmployee.JobTitle}");
             foreach (var item in takenByIDEmployee.EmployeesProjects)
             {
                 sb.AppendLine($"{item.Project.Name}");
+            }
+
+            return sb.ToString();
+        }
+
+        public static string GetDepartmentsWithMoreThan5Employees(SoftUniContext context)
+        {
+            var departmentsWithMoreThan5Emplooyes = context.Departments
+                                                     .Where(x => x.Employees.Count > 5)
+                                                     .OrderBy(x => x.Employees.Count)
+                                                     .ThenBy(x => x.Name)
+                                                     .Select(x => new
+                                                     {
+                                                         x.Name,
+                                                         x.Manager.FirstName,
+                                                         x.Manager.LastName,
+                                                         Employees = x.Employees.Select(e => new 
+                                                                                 {
+                                                                                  e.FirstName,
+                                                                                  e.LastName,
+                                                                                  e.JobTitle
+                                                                                 })
+                                                                                 .OrderBy(e => e.FirstName)
+                                                                                 .ThenBy(e => e.LastName)
+                                                                                 .ToList()
+                                                     })
+                                                     .ToList();
+
+            var sb = new StringBuilder();
+            foreach (var currDepartment in departmentsWithMoreThan5Emplooyes)
+            {
+                sb.AppendLine($"{currDepartment.Name} - {currDepartment.FirstName} {currDepartment.LastName}");
+                foreach (var employee in currDepartment.Employees)
+                {
+                    sb.AppendLine($"{employee.FirstName} {employee.LastName} - {employee.JobTitle}");
+                }
             }
             return sb.ToString();
         }
