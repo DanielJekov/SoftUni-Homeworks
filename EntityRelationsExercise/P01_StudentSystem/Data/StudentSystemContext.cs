@@ -32,7 +32,7 @@ namespace P01_StudentSystem.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           // Modeling mapping table
+            // Modeling mapping table
             modelBuilder.Entity<StudentCourse>()
                 .HasKey(x => new { x.CourseId, x.StudentId });
 

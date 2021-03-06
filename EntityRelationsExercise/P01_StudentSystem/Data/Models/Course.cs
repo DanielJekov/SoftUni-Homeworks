@@ -24,5 +24,3 @@ namespace P01_StudentSystem.Data.Models
         public ICollection<Homework> HomeworkSubmissions { get; set; }
     }
 }
-
-
