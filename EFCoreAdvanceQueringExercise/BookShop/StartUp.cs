@@ -9,14 +9,16 @@
     using System.Linq;
     using System.Text;
     using Z.EntityFramework.Plus;
+    using BookShop.Models;
 
     public class StartUp
     {
         public static void Main()
         {
             using var db = new BookShopContext();
-            //DbInitializer.ResetDatabase(db);
+           // DbInitializer.ResetDatabase(db);
 
+           Console.WriteLine(IncreasePricesById(db));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -306,6 +308,16 @@
             return context.Books
                 .Where(x => x.Copies < 4200)
                 .Delete();
+        }
+
+        public static int IncreasePricesById(BookShopContext context)
+        {
+            return context.Books
+                .Include(x => x.BookCategories)
+                .ThenInclude(x => x.Category)
+               .Where(x => x.Author.LastName == "Powell")
+                .Update(x => new Book { Price = x.Price - 3000 });
+
         }
     }
 }
