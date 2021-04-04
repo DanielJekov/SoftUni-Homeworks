@@ -16,9 +16,9 @@
         public static void Main()
         {
             using var db = new BookShopContext();
-           // DbInitializer.ResetDatabase(db);
+            // DbInitializer.ResetDatabase(db);
 
-           Console.WriteLine(IncreasePricesById(db));
+            Console.WriteLine(IncreasePricesById(db));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -319,5 +319,6 @@
                 .Update(x => new Book { Price = x.Price - 3000 });
 
         }
+
     }
 }
